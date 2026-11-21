@@ -518,7 +518,7 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
 
     blocks = []
     if top:
-        blocks.append({"kind": "top", "name": "Top Stories", "slug": "top", "color": "top",
+        blocks.append({"kind": "top", "name": "Top Stories", "slug": "top-stories", "color": "top",
                        "stories": [mk(s) for s in top]})
     if follows:
         blocks.append({"kind": "follow", "name": "Following", "slug": "following", "color": "follow",
