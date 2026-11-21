@@ -1,0 +1,56 @@
+# News Digest configuration — the only file you normally edit.
+
+title: News Digest
+timezone: America/New_York
+
+lookback_hours: 36        # ignore stories older than this
+max_per_category: 10      # stories shown per category
+max_per_source: 4         # max stories from one outlet within a category
+
+# Drop any story whose headline or summary contains one of these (whole word, any case).
+mute: []
+
+# Categories in display order. A feed with `filter: true` only keeps items matching the
+# category's keywords (whole word, any case), so broad feeds can feed narrow categories.
+categories:
+  - name: Science
+    feeds:
+      - { name: ScienceDaily, url: "https://www.sciencedaily.com/rss/all.xml" }
+      - { name: Nature, url: "https://www.nature.com/nature.rss" }
+      - { name: Phys.org, url: "https://phys.org/rss-feed/" }
+      - { name: Quanta, url: "https://www.quantamagazine.org/feed/" }
+      - { name: NASA, url: "https://www.nasa.gov/news-release/feed/" }
+
+  - name: Tech
+    feeds:
+      - { name: Ars Technica, url: "https://feeds.arstechnica.com/arstechnica/index" }
+      - { name: The Verge, url: "https://www.theverge.com/rss/index.xml" }
+      - { name: TechCrunch, url: "https://techcrunch.com/feed/" }
+      - { name: Wired, url: "https://www.wired.com/feed/rss" }
+      - { name: Hacker News, url: "https://hnrss.org/frontpage?points=150" }
+
+  - name: AI
+    keywords: [AI, A.I., artificial intelligence, LLM, LLMs, OpenAI, Anthropic, Claude,
+               ChatGPT, GPT, Gemini, DeepMind, Copilot, machine learning, deep learning,
+               neural network, neural networks, chatbot, chatbots, generative, Llama, Mistral]
+    feeds:
+      - { name: MIT Tech Review, url: "https://www.technologyreview.com/topic/artificial-intelligence/feed" }
+      - { name: The Verge, url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml" }
+      - { name: TechCrunch, url: "https://techcrunch.com/category/artificial-intelligence/feed/" }
+      - { name: Hacker News, url: "https://hnrss.org/frontpage?points=100", filter: true }
+      - { name: Ars Technica, url: "https://feeds.arstechnica.com/arstechnica/index", filter: true }
+
+  - name: Finance
+    feeds:
+      - { name: CNBC, url: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114" }
+      - { name: MarketWatch, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories" }
+      - { name: Bloomberg, url: "https://feeds.bloomberg.com/markets/news.rss" }
+      - { name: Yahoo Finance, url: "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC&region=US&lang=en-US" }
+
+  - name: Politics
+    feeds:
+      - { name: NPR, url: "https://feeds.npr.org/1014/rss.xml" }
+      - { name: Politico, url: "https://rss.politico.com/politics-news.xml" }
+      - { name: The Hill, url: "https://thehill.com/news/feed/" }
+      - { name: The Guardian, url: "https://www.theguardian.com/us-news/us-politics/rss" }
+      - { name: BBC World, url: "https://feeds.bbci.co.uk/news/world/rss.xml" }
