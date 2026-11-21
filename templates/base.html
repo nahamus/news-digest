@@ -76,6 +76,12 @@ nav a {
 }
 nav a::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
 nav a span { color: var(--c); font-weight: 700; font-size: 12px; }
+/* Mouse/trackpad: a hidden-scrollbar row can't be scrolled with a normal wheel,
+   so wrap the chips instead and show them all. Touch screens keep the swipeable row. */
+@media (hover: hover) and (pointer: fine) {
+  html { scroll-padding-top: 104px; }
+  nav .wrap { flex-wrap: wrap; justify-content: center; overflow-x: visible; max-width: 960px; }
+}
 
 /* sections */
 section { padding-top: 30px; }
