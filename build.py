@@ -303,7 +303,7 @@ def render(cfg: dict, per_cat: list[list[Story]], now: datetime) -> None:
         slug = re.sub(r"[^a-z0-9]+", "-", cat["name"].lower()).strip("-")
         sections.append(
             {"name": cat["name"], "slug": slug, "stories": cards,
-             "new": sum(c["new"] for c in cards)}
+             "new": sum(c["new"] for c in cards), "idx": len(sections) % 6}
         )
 
     env = Environment(
@@ -315,6 +315,9 @@ def render(cfg: dict, per_cat: list[list[Story]], now: datetime) -> None:
     page = env.get_template("digest.html").render(
         title=cfg.get("title", "News Digest"),
         updated=f"{now_local.strftime('%a %b')} {now_local.day}, {clock(now_local)}",
+        dateline=f"{now_local.strftime('%A, %B')} {now_local.day}",
+        updated_time=clock(now_local),
+        edition="Morning" if now_local.hour < 12 else "Evening",
         total_new=sum(s["new"] for s in sections),
         sections=sections,
     )
