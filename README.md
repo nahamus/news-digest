@@ -1,7 +1,7 @@
 # News Digest
 
-A personal news digest built from public RSS feeds by GitHub Actions twice a day
-(~7 AM and ~5 PM Eastern) and published to GitHub Pages:
+A personal news digest built from public RSS feeds by GitHub Actions three times a day
+(~7 AM, noon and ~5 PM Eastern) and published to GitHub Pages:
 https://nahamus.github.io/news-digest/
 
 ## What's on the page

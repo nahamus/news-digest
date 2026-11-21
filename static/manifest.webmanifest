@@ -1,7 +1,7 @@
 {
   "name": "News Digest",
   "short_name": "Digest",
-  "description": "Personal news digest, updated twice a day.",
+  "description": "Personal news digest, updated three times a day.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

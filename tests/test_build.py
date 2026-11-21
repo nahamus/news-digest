@@ -145,6 +145,14 @@ class FriendlyTime(unittest.TestCase):
         self.assertEqual(self.fmt(2026, 11, 14, 22, 0), "Nov 14")
 
 
+class Editions(unittest.TestCase):
+    def test_scheduled_runs_get_the_right_name_even_when_late(self):
+        # 7 AM, noon and 5 PM EST runs (8 AM, 1 PM, 6 PM in EDT), each up to ~45 min late
+        for hour, name in ((7, "Morning"), (8, "Morning"), (12, "Midday"), (13, "Midday"),
+                           (17, "Evening"), (18, "Evening")):
+            self.assertEqual(build.edition_name(hour), name, hour)
+
+
 class Dedupe(unittest.TestCase):
     def test_same_url_merges_even_with_different_query(self):
         stories = build.dedupe([

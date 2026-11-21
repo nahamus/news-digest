@@ -18,7 +18,7 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 ## Architecture
 
 ```
-GitHub Actions (cron, ~7 AM & ~5 PM Eastern)
+GitHub Actions (cron, ~7 AM, noon & ~5 PM Eastern)
   └─ build.py: fetch RSS → filter → categorize → dedupe → rank → render
        ├─ commits data/seen.json   (story history, keeps the repo "active")
        └─ deploys site/ to GitHub Pages (via Pages artifact; site/ is not committed)
@@ -112,8 +112,9 @@ chatbot, generative, Llama, Mistral.
 ## GitHub Actions workflow (`.github/workflows/build.yml`)
 
 - Triggers:
-  - `schedule`: `0 12 * * *` and `0 22 * * *` UTC. That's 7 AM / 5 PM during EST and
-    8 AM / 6 PM during EDT. GitHub cron may run 5–30 minutes late.
+  - `schedule`: `0 12 * * *`, `0 17 * * *` and `0 22 * * *` UTC. That's 7 AM / noon / 5 PM
+    during EST and 8 AM / 1 PM / 6 PM during EDT. GitHub cron may run 5–30 minutes late.
+    Editions are named Morning / Midday / Evening by local hour.
   - `workflow_dispatch`, for manual "build now".
   - `push` to `main` touching config.yaml, build.py, templates/**, static/**.
 - Permissions: `contents: write`, `pages: write`, `id-token: write`. Use a concurrency
@@ -156,4 +157,4 @@ chatbot, generative, Llama, Mistral.
 ## Open decisions
 
 - Final category list and any region focus (currently US + world politics, US markets).
-- Digest times (currently ~7 AM and ~5 PM Eastern).
+- Digest times (currently ~7 AM, noon and ~5 PM Eastern).

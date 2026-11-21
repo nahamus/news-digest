@@ -508,6 +508,15 @@ def friendly_time(dt: datetime, now_local: datetime) -> str:
     return f"{dt.strftime('%b')} {dt.day}"  # a weekday name would be ambiguous a week out
 
 
+def edition_name(hour: int) -> str:
+    """Scheduled runs land ~7-8 AM, ~12-1 PM and ~5-6 PM local (cron can start late)."""
+    if hour < 11:
+        return "Morning"
+    if hour < 15:
+        return "Midday"
+    return "Evening"
+
+
 def card(s: Story, cfg: dict, tz: ZoneInfo, now_local: datetime) -> dict:
     return {
         "title": s.lead.title,
@@ -569,7 +578,7 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
         b["briefing"] = brief.get(b["name"], "")
 
     total_new = len({c["key"] for b in blocks for c in b["stories"] if c["new"]})
-    edition = "Morning" if now_local.hour < 12 else "Evening"
+    edition = edition_name(now_local.hour)
     return {
         "title": cfg.get("title", "News Digest"),
         "updated": f"{now_local.strftime('%a %b')} {now_local.day}, {clock(now_local)}",
