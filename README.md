@@ -57,6 +57,9 @@ python -m venv .venv
 .venv\Scripts\python build.py
 ```
 
+Run the tests with `.venv\Scripts\python -m unittest discover tests` (the workflow runs
+them before every build, and a failure stops the deploy).
+
 Then open `site/index.html`. The log lists each feed and whether it failed.
 A local build also writes to `data/`; run `git checkout data` and delete any new files
 there afterwards so you don't commit local history.

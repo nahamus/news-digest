@@ -204,6 +204,39 @@ def update_health(cfg: dict, results: dict, now: datetime) -> None:
 
 # ---------------------------------------------------------------- pipeline
 
+def clean_summary(summary: str, title: str) -> str:
+    # journal boilerplate, e.g. "Nature, Published online: 20 November 2026; doi:10.1038/…"
+    summary = re.sub(r"^[^.]{0,60}Published online:[^;]*;\s*doi:\S+\s*", "", summary)
+    # Hacker News "Article URL: … Comments URL: …", or a summary that just repeats the headline
+    if summary.startswith("Article URL:") or norm(summary).startswith(norm(title)):
+        return ""
+    return truncate(summary)
+
+
+def read_entry(entry, feed: dict) -> tuple[str, str, str, datetime, str] | None:
+    """Normalize one feed entry to (title, link, summary, published, source), or None."""
+    title = clean_text(entry.get("title", ""))
+    link = (entry.get("link") or "").strip()
+    when = entry_time(entry)
+    if not title or not link or when is None:
+        return None
+    source = feed["name"]
+    if feed.get("publisher_from_entry"):
+        # Aggregators like Google News: credit the real outlet, and drop the
+        # " - Outlet" suffix they append to every headline.
+        publisher = clean_text((entry.get("source") or {}).get("title", ""))
+        allowed = feed.get("publishers")
+        if allowed and publisher.casefold() not in {p.casefold() for p in allowed}:
+            return None
+        if publisher:
+            source = publisher
+            suffix = f" - {publisher}"
+            if title.endswith(suffix) and len(title) > len(suffix):
+                title = title[: -len(suffix)].rstrip()
+    summary = clean_text(entry.get("summary") or entry.get("description") or "")
+    return title, link, clean_summary(summary, title), when, source
+
+
 def collect(cfg: dict, now: datetime) -> list[Item]:
     mute = word_regex(cfg.get("mute"))
     global_skip = cfg.get("skip_titles") or []
@@ -228,28 +261,21 @@ def collect(cfg: dict, now: datetime) -> list[Item]:
             skip = word_regex(global_skip + (feed.get("skip") or []))
             kept = skipped = 0
             for entry in parsed.entries:
-                title = clean_text(entry.get("title", ""))
-                link = (entry.get("link") or "").strip()
-                when = entry_time(entry)
-                if not title or not link or when is None:
+                read = read_entry(entry, feed)
+                if read is None:
                     continue
+                title, link, summary, when, source = read
                 if when < cutoff or when > now + timedelta(hours=1):
                     continue
                 if skip and skip.search(title):
                     skipped += 1
                     continue
-                summary = clean_text(entry.get("summary") or entry.get("description") or "")
-                # journal boilerplate, e.g. "Nature, Published online: 20 November 2026; doi:10.1038/…"
-                summary = re.sub(r"^[^.]{0,60}Published online:[^;]*;\s*doi:\S+\s*", "", summary)
-                if summary.startswith("Article URL:") or norm(summary).startswith(norm(title)):
-                    summary = ""
-                summary = truncate(summary)
                 text = f"{title} {summary}"
                 if feed.get("filter") and (kw is None or not kw.search(text)):
                     continue
                 if mute and mute.search(text):
                     continue
-                items.append(Item(title, link, summary, when, feed["name"], ci, order, window))
+                items.append(Item(title, link, summary, when, source, ci, order, window))
                 order += 1
                 kept += 1
             note = f", {skipped} skipped" if skipped else ""
@@ -279,7 +305,14 @@ def dedupe(items: list[Item]) -> list[Story]:
     weight = lambda ws: sum(idf[w] for w in ws)  # noqa: E731
     totals = [weight(ws) for ws in all_words]
 
+    norm_titles = [norm(it.title) for it in items]
+
     def same_story(i: int, j: int) -> bool:
+        # Identical headline: the same article reached us twice (e.g. an outlet's own feed
+        # and a Google News redirect link), so merge even within one outlet.
+        if norm_titles[i] and norm_titles[i] == norm_titles[j]:
+            return True
+        # Otherwise never merge an outlet with itself: its similar headlines are separate pieces.
         if items[i].source == items[j].source:
             return False
         if weight(title_words[i] & title_words[j]) < MATCH_TITLE_WEIGHT:

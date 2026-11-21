@@ -12,6 +12,7 @@ on:
       - build.py
       - feed_alerts.py
       - requirements.txt
+      - tests/**
       - templates/**
       - static/**
       - .github/workflows/build.yml
@@ -40,6 +41,9 @@ jobs:
 
       - name: Install requirements
         run: pip install -r requirements.txt
+
+      - name: Test
+        run: python -m unittest discover tests
 
       - name: Build
         env:

@@ -107,3 +107,21 @@ categories:
       - { name: The Guardian, url: "https://www.theguardian.com/world/ethiopia/rss", lookback_hours: 96 }
       - { name: BBC Africa, url: "https://feeds.bbci.co.uk/news/world/africa/rss.xml", filter: true, lookback_hours: 96 }
       - { name: Al Jazeera, url: "https://www.aljazeera.com/xml/rss/all.xml", filter: true, lookback_hours: 96 }
+      # Google News search: wire, international and Ethiopian outlets whose own feeds block
+      # bots. Each story is credited to its real outlet; links open through a Google redirect.
+      # Only the outlets listed under `publishers` are kept (the search also returns a lot of
+      # low-quality sites). Names must match how Google News labels the outlet.
+      - name: Google News
+        url: "https://news.google.com/rss/search?q=Ethiopia+when:3d&hl=en-US&gl=US&ceid=US:en"
+        publisher_from_entry: true
+        lookback_hours: 72
+        publishers: [Reuters, AP News, Associated Press, AFP, France 24, BBC, BBC News,
+                     Al Jazeera, DW.com, Africanews, The EastAfrican, The Africa Report,
+                     Addis Standard, Borkena, CapitalEthiopia, The Reporter Ethiopia,
+                     Ethiopia Insight, ENA English, Addis Fortune, Sudan Tribune, UN News,
+                     ReliefWeb, The Guardian, Bloomberg, Financial Times, The Economist,
+                     The New York Times, The Washington Post, Semafor, VOA, Voice of America,
+                     Council on Foreign Relations, International Crisis Group]
+      # Amharic-language sources, if you want them:
+      # - { name: BBC Amharic, url: "https://feeds.bbci.co.uk/amharic/rss.xml", lookback_hours: 96 }
+      # - { name: VOA Amharic, url: "https://amharic.voanews.com/api/", lookback_hours: 96 }
