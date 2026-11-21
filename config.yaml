@@ -15,8 +15,9 @@ top_stories:
 
 # Topics you follow: matching stories are highlighted and collected in a "Following"
 # section at the top. Whole words/phrases, any case.
-follow: [Stock Market, Federal Reserve, Inflation, Interest Rate, Recession, AI, Artificial Intelligence, LLM, Africa, Ethiopia]
-follow_max: 8
+follow: [Stock Market, Federal Reserve, Inflation, Interest Rate, Interest Rates, Recession,
+         LLM, LLMs, Africa, Ethiopia]
+follow_max: 12
 
 # Drop any story whose headline or summary contains one of these (whole word, any case).
 mute: []
