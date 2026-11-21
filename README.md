@@ -2,7 +2,7 @@
 
 A personal news digest built from public RSS feeds by GitHub Actions twice a day
 (~7 AM and ~5 PM Eastern) and published to GitHub Pages:
-https://tesogi2006.github.io/news-digest/
+https://nahamus.github.io/news-digest/
 
 ## Change what you see
 

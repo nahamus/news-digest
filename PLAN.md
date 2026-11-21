@@ -8,8 +8,8 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 
 - **Daily-digest style.** Checked a couple of times a day, not a live feed.
 - **Nothing runs on the PC.** All scheduled work runs on GitHub Actions.
-- **No new external services.** Only GitHub, which we already have (account `tesogi2006`,
-  `gh` CLI logged in). We use public RSS feeds with no API keys.
+- **No new external services.** Only GitHub, which we already have (repo in the `nahamus` org,
+  `gh` CLI logged in as `tesogi2006`). We use public RSS feeds with no API keys.
 - **Light on the phone.** One static HTML page with inline CSS, no images, and no JS
   except a tiny service-worker registration. No background activity.
 - **Installable.** A PWA (manifest + icons + service worker) for "Add to Home Screen" and
@@ -22,7 +22,7 @@ GitHub Actions (cron, ~7 AM & ~5 PM Eastern)
   └─ build.py: fetch RSS → filter → categorize → dedupe → rank → render
        ├─ commits data/seen.json   (story history, keeps the repo "active")
        └─ deploys site/ to GitHub Pages (via Pages artifact; site/ is not committed)
-            └─ phone opens https://tesogi2006.github.io/news-digest/
+            └─ phone opens https://nahamus.github.io/news-digest/
 ```
 
 Why we don't fetch in the browser: most news sites block cross-site requests for their
@@ -128,7 +128,7 @@ chatbot, generative, Llama, Mistral.
    Open `site/index.html` locally to review. (This is a one-off check during
    development, not a recurring process.)
 2. Generate the icons (192/512 PNG). A one-off script is fine and the PNGs get committed.
-3. `git init`, then create a **public** repo `news-digest` with `gh repo create` and push.
+3. `git init`, then create a **public** repo `nahamus/news-digest` with `gh repo create` and push.
    Free Pages requires a public repo, so the config and feed choices will be visible.
    **Confirm with the user before creating or pushing the repo.**
 4. Repo Settings → Pages → Source: **GitHub Actions** (or set it via `gh api`).
