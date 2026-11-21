@@ -1,167 +1,56 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>{{ title }}</title>
-<meta name="description" content="Personal news digest, updated twice a day.">
-<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121316" media="(prefers-color-scheme: dark)">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Digest">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<style>
-:root {
-  color-scheme: light dark;
-  --bg: #f7f5f0; --surface: #ffffff; --text: #1a1b1e; --muted: #6b6d74; --faint: #9a9ca2;
-  --line: #e4e1d8; --chip: #ece9e1; --accent: #b4441d;
-  --c0: #0f7b6c; --c1: #2f5fd0; --c2: #7a4fd6; --c3: #2e7d32; --c4: #c0392b; --c5: #b7791f;
-  --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, "Noto Serif", serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #121316; --surface: #1b1c20; --text: #ecebe8; --muted: #9c9ea5; --faint: #6f7178;
-    --line: #2a2c31; --chip: #222328; --accent: #ff8a5c;
-    --c0: #3cc7b2; --c1: #7ea2ff; --c2: #b394ff; --c3: #6cc070; --c4: #ff7a6b; --c5: #e9b35c;
-  }
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 60px; }
-body {
-  margin: 0; background: var(--bg); color: var(--text);
-  font: 16px/1.45 var(--sans);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-a { color: inherit; text-decoration: none; }
-.wrap { max-width: 680px; margin: 0 auto; padding: 0 16px; }
-
-/* masthead */
-header { padding: calc(36px + env(safe-area-inset-top)) 0 20px; text-align: center; }
-.eyebrow {
-  margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--muted);
-}
-h1 {
-  margin: 6px 0 8px; font: 700 36px/1.05 var(--serif); letter-spacing: -.01em;
-}
-.meta { margin: 0; color: var(--muted); font-size: 14px; }
-.pill {
-  display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
-  background: var(--accent); color: var(--bg); font-size: 12px; font-weight: 700;
-}
-
-/* category nav */
-nav {
-  position: sticky; top: 0; z-index: 2;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  -webkit-backdrop-filter: saturate(1.6) blur(12px); backdrop-filter: saturate(1.6) blur(12px);
-  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-}
-nav .wrap {
-  display: flex; gap: 6px; overflow-x: auto; padding-top: 9px; padding-bottom: 9px;
-  scrollbar-width: none; justify-content: safe center;
-}
-nav .wrap::-webkit-scrollbar { display: none; }
-nav a {
-  flex: none; display: flex; align-items: center; gap: 6px;
-  padding: 6px 12px; border-radius: 999px; background: var(--chip);
-  font-size: 14px; font-weight: 600;
-}
-nav a::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
-nav a span { color: var(--c); font-weight: 700; font-size: 12px; }
-
-/* sections */
-section { padding-top: 30px; }
-.sec-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding-bottom: 8px; margin-bottom: 4px; border-bottom: 2px solid var(--c);
-}
-h2 { margin: 0; font: 700 22px/1.2 var(--serif); }
-.sec-head small { color: var(--muted); font-size: 13px; }
-.sec-head small b { color: var(--c); }
-ol { list-style: none; margin: 0; padding: 0; }
-
-/* stories */
-.story { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.story:last-child { border-bottom: 0; }
-.kicker {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px;
-  font-size: 12px; color: var(--faint); margin-bottom: 4px;
-}
-.kicker .src { color: var(--c); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
-.kicker .new {
-  color: var(--accent); font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-}
-.kicker .new::before {
-  content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 4px;
-  border-radius: 50%; background: var(--accent); vertical-align: 1px;
-}
-.hl { display: block; font: 600 18px/1.28 var(--serif); overflow-wrap: anywhere; }
-.story a:visited .hl { color: var(--muted); }
-.sum {
-  margin: 5px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--muted);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.also { margin-top: 5px; font-size: 12px; color: var(--faint); }
-.also b { color: var(--muted); font-weight: 600; }
-
-/* lead story */
-.lead {
-  margin: 12px 0 4px; padding: 16px; border: 0; border-radius: 14px; background: var(--surface);
-  box-shadow: 0 0 0 1px var(--line), 0 4px 14px -8px rgb(0 0 0 / .18);
-}
-.lead .hl { font-size: 22px; line-height: 1.22; }
-.lead .sum { font-size: 15px; color: var(--text); opacity: .8; -webkit-line-clamp: 3; margin-top: 8px; }
-
-.empty { color: var(--muted); font-size: 15px; padding: 14px 0; }
-footer {
-  margin-top: 36px; padding: 20px 0 40px; border-top: 1px solid var(--line);
-  color: var(--faint); font-size: 13px; text-align: center;
-}
-footer a { color: var(--muted); font-weight: 600; }
-{% for i in range(6) %}.k{{ i }} { --c: var(--c{{ i }}); }
-{% endfor %}
-</style>
-</head>
-<body id="top">
-<header class="wrap">
-  <p class="eyebrow">{{ dateline }} · {{ edition }} edition</p>
-  <h1>{{ title }}</h1>
-  <p class="meta">Updated {{ updated_time }}{% if total_new %}<span class="pill">{{ total_new }} new</span>{% endif %}</p>
-</header>
-<nav aria-label="Categories"><div class="wrap">
-{% for s in sections %}
-  <a class="k{{ s.idx }}" href="#{{ s.slug }}">{{ s.name }}{% if s.new %}<span>{{ s.new }}</span>{% endif %}</a>
-{% endfor %}
-</div></nav>
-<main class="wrap">
-{% for s in sections %}
-<section id="{{ s.slug }}" class="k{{ s.idx }}">
-  <div class="sec-head">
-    <h2>{{ s.name }}</h2>
-    <small>{{ s.stories | length }} stories{% if s.new %} · <b>{{ s.new }} new</b>{% endif %}</small>
-  </div>
-  {% if s.stories %}
-  <ol>
-  {% for st in s.stories %}
-    <li class="story{% if loop.first %} lead{% endif %}">
+{% extends "base.html" %}
+{% block title %}{{ title }}{% if is_archive %} · {{ dateline }} {{ edition }}{% endif %}{% endblock %}
+{% block body_attrs %} data-built="{{ built }}"{% endblock %}
+{% block body %}
+{% macro story(st, b, lead) %}
+    <li class="story{% if lead %} lead{% endif %}{% if st.new %} is-new{% endif %}" data-seen="{{ st.seen }}" data-key="{{ st.key }}">
       <a href="{{ st.url }}" rel="noopener">
         <div class="kicker">
-          {% if st.new %}<span class="new">New</span>{% endif %}
+          <span class="new">New</span>
+          {% if b.kind != "category" %}<span class="cat cc{{ st.cat_idx }}">{{ st.category }}</span><span>·</span>{% endif %}
           <span class="src">{{ st.source }}</span><span>·</span><time datetime="{{ st.iso }}">{{ st.time }}</time>
         </div>
-        <span class="hl">{{ st.title }}</span>
-        {% if st.summary %}<p class="sum">{{ st.summary }}</p>{% endif %}
+        <span class="hl">{{ st.title | hl }}</span>
+        {% if st.summary %}<p class="sum">{{ st.summary | hl }}</p>{% endif %}
       </a>
       {% if st.also %}<div class="also">Also covered by <b>{{ st.also | join(", ") }}</b></div>{% endif %}
     </li>
-  {% endfor %}
+{% endmacro %}
+<header class="wrap">
+  <p class="eyebrow">{{ dateline }} · {{ edition }} edition</p>
+  <h1>{{ title }}</h1>
+  {% if is_archive %}
+  <p class="meta">Archived edition · <a href="../">Today's digest</a></p>
+  {% else %}
+  <p class="meta">Updated {{ updated_time }}<span class="pill" id="total-new"{% if not total_new %} hidden{% endif %}>{{ total_new }} new</span></p>
+  {% endif %}
+</header>
+<nav aria-label="Sections"><div class="wrap">
+{% for b in blocks %}
+  <a class="k{{ b.color }}" href="#{{ b.slug }}">{{ b.name }}<span data-count="{{ b.slug }}"{% if not b.new %} hidden{% endif %}>{{ b.new }}</span></a>
+{% endfor %}
+</div></nav>
+<main class="wrap">
+{% for b in blocks %}
+<section id="{{ b.slug }}" class="k{{ b.color }}">
+  <div class="sec-head">
+    <h2>{{ b.name }}</h2>
+    <small>{{ b.stories | length }} {{ "story" if b.stories | length == 1 else "stories" }}<span data-count="{{ b.slug }}"{% if not b.new %} hidden{% endif %}> · <b>{{ b.new }} new</b></span></small>
+  </div>
+  {% if b.briefing %}<p class="brief"><b>Briefing · AI summary</b>{{ b.briefing }}</p>{% endif %}
+  {% if b.stories %}
+  {% set limit = show_first if b.kind == "category" else 99 %}
+  <ol>
+  {% for st in b.stories[:limit] %}{{ story(st, b, loop.first) }}{% endfor %}
   </ol>
+  {% if b.stories | length > limit %}
+  <details>
+    <summary>Show {{ b.stories | length - limit }} more</summary>
+    <ol>
+    {% for st in b.stories[limit:] %}{{ story(st, b, false) }}{% endfor %}
+    </ol>
+  </details>
+  {% endif %}
   {% else %}
   <p class="empty">No stories in this window.</p>
   {% endif %}
@@ -169,8 +58,25 @@ footer a { color: var(--muted); font-weight: 600; }
 {% endfor %}
 </main>
 <footer class="wrap">
-  Built {{ updated }} from public RSS feeds · <a href="#top">Back to top</a>
+  Built {{ updated }} from public RSS feeds ·
+  <a href="{{ base }}archive/">Archive</a> · <a href="#top">Back to top</a>
 </footer>
-<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");</script>
-</body>
-</html>
+{% if not is_archive %}
+<script>
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+// "New" = new since your last visit (falls back to "new since the last build" on a first visit)
+try{(function(){var K="digest:lastVisit",d=document,last=+localStorage.getItem(K)||0,
+built=+d.body.dataset.built;if(last&&last<built){var keys={};
+d.querySelectorAll("section").forEach(function(sec){var n=0;
+sec.querySelectorAll("li[data-seen]").forEach(function(li){var f=+li.dataset.seen>last;
+li.classList.toggle("is-new",f);if(f){n++;keys[li.dataset.key]=1;}});
+d.querySelectorAll('[data-count="'+sec.id+'"]').forEach(function(el){el.hidden=!n;
+var t=el.querySelector("b")||el;t.textContent=n+(t.tagName=="B"?" new":"");});});
+var tot=Object.keys(keys).length,p=d.getElementById("total-new");
+if(p){p.hidden=!tot;p.textContent=tot+" new";}}
+else if(last>=built){d.querySelectorAll(".is-new").forEach(function(li){li.classList.remove("is-new")});
+d.querySelectorAll("[data-count],#total-new").forEach(function(el){el.hidden=true});}
+addEventListener("pagehide",function(){try{localStorage.setItem(K,Math.max(built,last))}catch(e){}});})()}catch(e){}
+</script>
+{% endif %}
+{% endblock %}

@@ -3,23 +3,60 @@
 title: News Digest
 timezone: America/New_York
 
-lookback_hours: 36        # ignore stories older than this
-max_per_category: 10      # stories shown per category
-max_per_source: 4         # max stories from one outlet within a category
+lookback_hours: 36        # ignore stories older than this (a feed can override it)
+max_per_category: 10      # stories per category
+max_per_source: 4         # max stories from one outlet within a category (a category can override it)
+show_first: 5             # stories shown per category before "Show more"
+
+# Stories covered by at least this many outlets get pulled into a Top Stories section.
+top_stories:
+  min_outlets: 3
+  max: 5
+
+# Topics you follow: matching stories are highlighted and collected in a "Following"
+# section at the top. Whole words/phrases, any case.
+follow: [SpaceX, Federal Reserve, Anthropic]
+follow_max: 8
 
 # Drop any story whose headline or summary contains one of these (whole word, any case).
 mute: []
 
+# Drop stories whose *headline* contains one of these. Feeds can add their own `skip` list.
+skip_titles: [quiz, crossword, podcast, horoscope, promo code, coupon, coupons,
+              best deals, deals on, Black Friday deal, Black Friday deals,
+              Cyber Monday deal, Cyber Monday deals]
+
+# Past editions kept in the archive.
+archive_days: 30
+
+# Open a GitHub issue when a feed fails this many builds in a row (closed when it recovers).
+alert_after_failures: 3
+
+# AI briefing: a 2-3 sentence summary at the top of each category, written by Claude.
+# Only runs when the repo has an ANTHROPIC_API_KEY secret; otherwise it is skipped.
+briefing:
+  enabled: true
+  model: claude-opus-5-5
+  effort: low
+
 # Categories in display order. A feed with `filter: true` only keeps items matching the
 # category's keywords (whole word, any case), so broad feeds can feed narrow categories.
+# Any RSS/Atom feed works, including YouTube channels and Substack newsletters, e.g.
+#   - { name: Veritasium, url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA" }
+#   - { name: Noahpinion, url: "https://www.noahpinion.blog/feed" }
+# (Reddit blocks automated feed requests, so subreddit feeds don't work here.)
 categories:
   - name: Science
+    max_per_source: 2
     feeds:
       - { name: ScienceDaily, url: "https://www.sciencedaily.com/rss/all.xml" }
-      - { name: Nature, url: "https://www.nature.com/nature.rss" }
+      # Nature dates items by day only, so give it a longer window.
+      - { name: Nature, url: "https://www.nature.com/nature.rss", lookback_hours: 72 }
       - { name: Phys.org, url: "https://phys.org/rss-feed/" }
       - { name: Quanta, url: "https://www.quantamagazine.org/feed/" }
-      - { name: NASA, url: "https://www.nasa.gov/news-release/feed/" }
+      - { name: NASA, url: "https://www.nasa.gov/news-release/feed/", skip: [APOD] }
+      - { name: New Scientist, url: "https://www.newscientist.com/feed/home/" }
+      - { name: Science News, url: "https://www.sciencenews.org/feed" }
 
   - name: Tech
     feeds:
@@ -44,7 +81,9 @@ categories:
     feeds:
       - { name: CNBC, url: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114" }
       - { name: MarketWatch, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories" }
-      - { name: Bloomberg, url: "https://feeds.bloomberg.com/markets/news.rss" }
+      - name: Bloomberg
+        url: "https://feeds.bloomberg.com/markets/news.rss"
+        skip: [Pointed!, This Weekend, Bloomberg Surveillance, Odd Lots, Big Take, Wall Street Week]
       - { name: Yahoo Finance, url: "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC&region=US&lang=en-US" }
 
   - name: Politics

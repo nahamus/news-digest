@@ -148,10 +148,10 @@ chatbot, generative, Llama, Mistral.
 
 | Phase | Scope |
 |---|---|
-| **1. MVP** | Everything above: config, build, page, PWA, workflow, deploy |
-| **2. Polish** | Tune feeds/keywords after a few days of use; per-category "show more" via `<details>` |
-| **3. Optional AI** | A short "top stories" briefing per category, added as a workflow step. Needs an API key stored as a repo secret, so it's only added if the user wants it |
-| **4. Extras** | More source types (Reddit/YouTube RSS, Substack), keyword highlighting, an archive of past digests |
+| **1. MVP** ✅ | Everything above: config, build, page, PWA, workflow, deploy |
+| **2. Polish** ✅ | Per-category "show more" via `<details>`, headline skip lists, more Science sources, IDF-weighted story matching, Top Stories, feed-health issues, "new since last visit". Ongoing: tune feeds/keywords with use |
+| **3. Optional AI** ✅ (built, off until a key is added) | A short briefing per category, written by Claude during the build. Runs only when the `ANTHROPIC_API_KEY` repo secret exists |
+| **4. Extras** ✅ | YouTube/Substack feeds (Reddit blocks bots), followed-topic highlighting, 30-day archive of past editions |
 
 ## Open decisions
 

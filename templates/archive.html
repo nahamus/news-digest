@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Archive{% endblock %}
+{% block body %}
+<header class="wrap">
+  <p class="eyebrow">Past editions</p>
+  <h1>Archive</h1>
+  <p class="meta"><a href="../">Today's digest</a></p>
+</header>
+<main class="wrap">
+  {% if editions %}
+  <ul class="editions">
+  {% for e in editions %}
+    <li><a href="{{ e.id }}.html"><b>{{ e.dateline }}</b><span>{{ e.edition }} · {{ e.count }} stories</span></a></li>
+  {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">No archived editions yet.</p>
+  {% endif %}
+</main>
+<footer class="wrap"><a href="#top">Back to top</a></footer>
+{% endblock %}

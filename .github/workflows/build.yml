@@ -10,6 +10,8 @@ on:
     paths:
       - config.yaml
       - build.py
+      - feed_alerts.py
+      - requirements.txt
       - templates/**
       - static/**
       - .github/workflows/build.yml
@@ -17,6 +19,7 @@ on:
 permissions:
   contents: write
   actions: read     # deploy-pages lists this run's artifacts
+  issues: write     # feed_alerts.py opens/closes feed-health issues
   pages: write
   id-token: write
 
@@ -28,9 +31,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -39,23 +42,32 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build
+        env:
+          # Optional: the AI briefing runs only when this secret exists.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python build.py
 
-      - name: Commit seen.json
+      - name: Commit data (seen, health, archive)
         run: |
-          if [ -n "$(git status --porcelain data/seen.json)" ]; then
+          if [ -n "$(git status --porcelain data)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/seen.json
-            git commit -m "Update seen.json [skip ci]"
-            # seen.json is only a history cache: on a conflict, keep this build's copy
+            git add data
+            git commit -m "Update digest data [skip ci]"
+            # data/ is generated: on a conflict, keep this build's copy
             git pull --rebase -X theirs
             git push
           fi
 
-      - uses: actions/configure-pages@v5
+      - name: Feed health alerts
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python feed_alerts.py
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -67,4 +79,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

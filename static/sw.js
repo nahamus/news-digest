@@ -1,5 +1,5 @@
 // Network-first: always try for the latest digest, fall back to the cached copy offline.
-const CACHE = "digest-v1";
+const CACHE = "digest-v2";
 const SHELL = ["./", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
