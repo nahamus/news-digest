@@ -20,6 +20,7 @@
   --bg: #f7f5f0; --surface: #ffffff; --text: #1a1b1e; --muted: #6b6d74; --faint: #9a9ca2;
   --line: #e4e1d8; --chip: #ece9e1; --accent: #b4441d; --mark: #fde9a8;
   --c0: #0f7b6c; --c1: #2f5fd0; --c2: #7a4fd6; --c3: #2e7d32; --c4: #c0392b; --c5: #b7791f;
+  --cf: #b83280;
   --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, "Noto Serif", serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -28,6 +29,7 @@
     --bg: #121316; --surface: #1b1c20; --text: #ecebe8; --muted: #9c9ea5; --faint: #6f7178;
     --line: #2a2c31; --chip: #222328; --accent: #ff8a5c; --mark: #5a4a12;
     --c0: #3cc7b2; --c1: #7ea2ff; --c2: #b394ff; --c3: #6cc070; --c4: #ff7a6b; --c5: #e9b35c;
+    --cf: #f472b6;
   }
 }
 * { box-sizing: border-box; }
@@ -154,7 +156,7 @@ footer a { color: var(--muted); font-weight: 600; }
 .editions span { color: var(--muted); font-size: 14px; }
 
 .ktop { --c: var(--accent); }
-.kfollow { --c: var(--c5); }
+.kfollow { --c: var(--cf); }
 {% for i in range(6) %}.k{{ i }} { --c: var(--c{{ i }}); } .cc{{ i }} { --cc: var(--c{{ i }}); }
 {% endfor %}
 </style>

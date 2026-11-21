@@ -470,7 +470,9 @@ def friendly_time(dt: datetime, now_local: datetime) -> str:
         return clock(dt)
     if days == 1:
         return f"Yesterday {clock(dt)}"
-    return f"{dt.strftime('%a')} {clock(dt)}"
+    if days < 6:
+        return f"{dt.strftime('%a')} {clock(dt)}"
+    return f"{dt.strftime('%b')} {dt.day}"  # a weekday name would be ambiguous a week out
 
 
 def card(s: Story, cfg: dict, tz: ZoneInfo, now_local: datetime) -> dict:

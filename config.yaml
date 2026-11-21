@@ -16,7 +16,7 @@ top_stories:
 # Topics you follow: matching stories are highlighted and collected in a "Following"
 # section at the top. Whole words/phrases, any case.
 follow: [Stock Market, Federal Reserve, Inflation, Interest Rate, Interest Rates, Recession,
-         LLM, LLMs, Africa, Ethiopia]
+         LLM, LLMs, Africa]
 follow_max: 12
 
 # Drop any story whose headline or summary contains one of these (whole word, any case).
@@ -94,3 +94,16 @@ categories:
       - { name: The Hill, url: "https://thehill.com/news/feed/" }
       - { name: The Guardian, url: "https://www.theguardian.com/us-news/us-politics/rss" }
       - { name: BBC World, url: "https://feeds.bbci.co.uk/news/world/rss.xml" }
+
+  # Ethiopia news moves slower than the other categories, so these feeds look back further.
+  # (Addis Standard, The Reporter, Borkena and Capital don't serve usable feeds to bots.)
+  - name: Ethiopia
+    max_per_source: 6
+    keywords: [Ethiopia, Ethiopian, Ethiopians, Addis Ababa, Tigray, Amhara, Oromia, Abiy]
+    feeds:
+      - { name: AllAfrica, url: "https://allafrica.com/tools/headlines/rdf/ethiopia/headlines.rdf", lookback_hours: 96 }
+      - { name: Ethiopia Insight, url: "https://www.ethiopia-insight.com/feed/", lookback_hours: 96 }
+      - { name: Addis Fortune, url: "https://addisfortune.news/feed/", lookback_hours: 168 }
+      - { name: The Guardian, url: "https://www.theguardian.com/world/ethiopia/rss", lookback_hours: 96 }
+      - { name: BBC Africa, url: "https://feeds.bbci.co.uk/news/world/africa/rss.xml", filter: true, lookback_hours: 96 }
+      - { name: Al Jazeera, url: "https://www.aljazeera.com/xml/rss/all.xml", filter: true, lookback_hours: 96 }
