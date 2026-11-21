@@ -9,7 +9,7 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 - **Daily-digest style.** Checked a couple of times a day, not a live feed.
 - **Nothing runs on the PC.** All scheduled work runs on GitHub Actions.
 - **No new external services.** Only GitHub, which we already have (repo in the `nahamus` org,
-  `gh` CLI logged in as `tesogi2006`). We use public RSS feeds with no API keys.
+  `gh` CLI logged in as `nahamus`). We use public RSS feeds with no API keys.
 - **Light on the phone.** One static HTML page with inline CSS, no images, and no JS
   except a tiny service-worker registration. No background activity.
 - **Installable.** A PWA (manifest + icons + service worker) for "Add to Home Screen" and
