@@ -367,7 +367,7 @@ class Render(unittest.TestCase):
         self.assertIn("<mark>Riemann</mark>", page)
         self.assertIn("Also covered by <b>B</b>", page)
         self.assertEqual(ctx["total_new"], 1)
-        self.assertIn("Morning", archive)
+        self.assertIn(f"{ctx['edition']} · ", archive)  # NOW is 11 AM Eastern: Midday
 
 
 class Briefing(unittest.TestCase):
