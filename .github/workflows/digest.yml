@@ -5,6 +5,7 @@ on:
     - cron: "17 12 * * *"   # 7 AM EST / 8 AM EDT
     - cron: "17 17 * * *"   # noon EST / 1 PM EDT
     - cron: "17 22 * * *"   # 5 PM EST / 6 PM EDT
+    - cron: "*/5 * * * *"    # TEMPORARY: schedule test, remove after
   workflow_dispatch:
   push:
     branches: [main]
