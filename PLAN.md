@@ -112,7 +112,7 @@ chatbot, generative, Llama, Mistral.
 ## GitHub Actions workflow (`.github/workflows/build.yml`)
 
 - Triggers:
-  - `schedule`: `0 12 * * *`, `0 17 * * *` and `0 22 * * *` UTC. That's 7 AM / noon / 5 PM
+  - `schedule`: `17 12 * * *`, `17 17 * * *` and `17 22 * * *` UTC (off the hour, where GitHub drops fewer runs). That's 7 AM / noon / 5 PM
     during EST and 8 AM / 1 PM / 6 PM during EDT. GitHub cron may run 5–30 minutes late.
     Editions are named Morning / Midday / Evening by local hour.
   - `workflow_dispatch`, for manual "build now".

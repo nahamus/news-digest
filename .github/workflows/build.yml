@@ -2,9 +2,9 @@ name: Build digest
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # 7 AM EST / 8 AM EDT
-    - cron: "0 17 * * *"   # noon EST / 1 PM EDT
-    - cron: "0 22 * * *"   # 5 PM EST / 6 PM EDT
+    - cron: "17 12 * * *"   # 7 AM EST / 8 AM EDT
+    - cron: "17 17 * * *"   # noon EST / 1 PM EDT
+    - cron: "17 22 * * *"   # 5 PM EST / 6 PM EDT
   workflow_dispatch:
   push:
     branches: [main]
