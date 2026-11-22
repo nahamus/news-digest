@@ -46,7 +46,7 @@ feed recovers.
 Actions tab → **Build digest** → **Run workflow**, or:
 
 ```
-gh workflow run build.yml -R nahamus/news-digest
+gh workflow run digest.yml -R nahamus/news-digest
 ```
 
 ## Build locally (optional)

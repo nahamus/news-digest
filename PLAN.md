@@ -46,7 +46,7 @@ news-digest/
 │   └── icon-512.png
 ├── data/seen.json               # generated; committed by the workflow
 ├── site/                        # generated; git-ignored
-└── .github/workflows/build.yml
+└── .github/workflows/digest.yml
 ```
 
 ## config.yaml (design + starter feeds)
@@ -109,7 +109,7 @@ chatbot, generative, Llama, Mistral.
   `/news-digest/`.
 - Target size is under ~150 KB.
 
-## GitHub Actions workflow (`.github/workflows/build.yml`)
+## GitHub Actions workflow (`.github/workflows/digest.yml`)
 
 - Triggers:
   - `schedule`: `17 12 * * *`, `17 17 * * *` and `17 22 * * *` UTC (off the hour, where GitHub drops fewer runs). That's 7 AM / noon / 5 PM
