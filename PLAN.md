@@ -120,7 +120,7 @@ chatbot, generative, Llama, Mistral.
 - Permissions: `contents: write`, `pages: write`, `id-token: write`. Use a concurrency
   group so builds don't overlap.
 - Steps: checkout → setup-python 3.12 (pip cache) → install requirements → `python build.py`
-  → commit `data/seen.json` if it changed (bot identity, `[skip ci]`) → configure-pages →
+  → commit `data/seen.json` if it changed (bot identity; no `[skip ci]`, which would block scheduled runs) → configure-pages →
   upload-pages-artifact (`site/`) → deploy-pages. Use the `github-pages` environment.
 
 ## Setup steps (one time)
