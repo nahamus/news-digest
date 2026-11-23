@@ -1,7 +1,7 @@
 # News Digest
 
 A personal news digest built from public RSS feeds by GitHub Actions three times a day
-(~7 AM, noon and ~5 PM Eastern) and published to GitHub Pages:
+(7:17 AM, 12:17 PM and 5:17 PM Eastern) and published to GitHub Pages:
 https://nahamus.github.io/news-digest/
 
 ## What's on the page
@@ -40,6 +40,27 @@ To turn it off again, delete the secret or set `briefing: enabled: false`.
 If a feed fails `alert_after_failures` builds in a row (default 3), the workflow opens a
 GitHub issue labeled `feed-health`, so GitHub emails you. The issue closes itself when the
 feed recovers.
+
+## Schedule
+
+GitHub's built-in `schedule` trigger never fired for this account, so a free
+[cron-job.org](https://cron-job.org) job starts the builds instead. At 7:17, 12:17 and
+17:17 (America/New_York, so daylight saving is handled) it sends:
+
+```
+POST https://api.github.com/repos/nahamus/news-digest/actions/workflows/digest.yml/dispatches
+Authorization: Bearer <token>
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: 2022-11-28
+Content-Type: application/json
+
+{"ref":"main"}
+```
+
+A success returns 204. The token is a fine-grained GitHub token limited to this repo with
+**Actions: Read and write** only. **It expires**: when it does, cron-job.org emails a
+failure. Create a new token with the same settings and paste it into the job's
+`Authorization` header.
 
 ## Build now
 

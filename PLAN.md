@@ -7,7 +7,7 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 ## Requirements (agreed)
 
 - **Daily-digest style.** Checked a couple of times a day, not a live feed.
-- **Nothing runs on the PC.** All scheduled work runs on GitHub Actions.
+- **Nothing runs on the PC.** All builds run on GitHub Actions.
 - **No new external services.** Only GitHub, which we already have (repo in the `nahamus` org,
   `gh` CLI logged in as `nahamus`). We use public RSS feeds with no API keys.
 - **Light on the phone.** One static HTML page with inline CSS, no images, and no JS
@@ -18,7 +18,8 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 ## Architecture
 
 ```
-GitHub Actions (cron, ~7 AM, noon & ~5 PM Eastern)
+cron-job.org (7:17 AM, 12:17 PM & 5:17 PM Eastern) → workflow_dispatch API
+  └─ GitHub Actions
   └─ build.py: fetch RSS → filter → categorize → dedupe → rank → render
        ├─ commits data/seen.json   (story history, keeps the repo "active")
        └─ deploys site/ to GitHub Pages (via Pages artifact; site/ is not committed)
@@ -112,15 +113,17 @@ chatbot, generative, Llama, Mistral.
 ## GitHub Actions workflow (`.github/workflows/digest.yml`)
 
 - Triggers:
-  - `schedule`: `17 12 * * *`, `17 17 * * *` and `17 22 * * *` UTC (off the hour, where GitHub drops fewer runs). That's 7 AM / noon / 5 PM
-    during EST and 8 AM / 1 PM / 6 PM during EDT. GitHub cron may run 5–30 minutes late.
-    Editions are named Morning / Midday / Evening by local hour.
-  - `workflow_dispatch`, for manual "build now".
+  - `workflow_dispatch`: manual "build now", and the timed builds. A cron-job.org job
+    POSTs to the dispatch API at 7:17 / 12:17 / 17:17 America/New_York, using a
+    fine-grained token (this repo, Actions read/write only). Editions are named
+    Morning / Midday / Evening by local hour.
+  - No `schedule` trigger: GitHub's never fired for this repo or for fresh test repos on
+    the same account (Nov 2026), despite active workflows and permissive org settings.
   - `push` to `main` touching config.yaml, build.py, templates/**, static/**.
 - Permissions: `contents: write`, `pages: write`, `id-token: write`. Use a concurrency
   group so builds don't overlap.
 - Steps: checkout → setup-python 3.12 (pip cache) → install requirements → `python build.py`
-  → commit `data/seen.json` if it changed (bot identity; no `[skip ci]`, which would block scheduled runs) → configure-pages →
+  → commit `data/seen.json` if it changed (bot identity) → configure-pages →
   upload-pages-artifact (`site/`) → deploy-pages. Use the `github-pages` environment.
 
 ## Setup steps (one time)
@@ -138,9 +141,8 @@ chatbot, generative, Llama, Mistral.
 
 ## Known caveats
 
-- **Inactivity pause:** GitHub may disable scheduled workflows after 60 days without repo
-  activity. The `seen.json` commits should prevent this. If it happens, GitHub emails you
-  and one click re-enables it.
+- **Timer token expiry:** the cron-job.org job's GitHub token expires. cron-job.org
+  emails on failure. Renew the token and update the job's `Authorization` header.
 - Some feeds may change URLs or block bots over time. Failures are logged in the Actions
   run, so check there if a source goes quiet.
 - Paywalled outlets (Bloomberg, etc.) may link to articles you can't read in full.
@@ -157,4 +159,4 @@ chatbot, generative, Llama, Mistral.
 ## Open decisions
 
 - Final category list and any region focus (currently US + world politics, US markets).
-- Digest times (currently ~7 AM, noon and ~5 PM Eastern).
+- Digest times (currently 7:17 AM, 12:17 PM and 5:17 PM Eastern, set in cron-job.org).
