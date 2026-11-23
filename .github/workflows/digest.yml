@@ -57,8 +57,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data
-            # No skip tag: GitHub skips scheduled runs when the latest commit has one.
-            # Not needed anyway: pushes made with GITHUB_TOKEN never start workflows.
+            # No [skip ci] needed: pushes made with GITHUB_TOKEN never start workflows.
             git commit -m "Update digest data"
             # data/ is generated: on a conflict, keep this build's copy
             git pull --rebase -X theirs
