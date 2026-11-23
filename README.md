@@ -24,7 +24,7 @@ Edit `config.yaml`. Pushing a change to `main` rebuilds the site automatically.
 - `skip_titles` / a feed's `skip`: drop filler by headline (quizzes, coupons, podcasts…).
 - `mute`: drop stories mentioning a word anywhere.
 - `max_per_category`, `max_per_source` (also per category), `show_first`,
-  `lookback_hours` (also per feed), `top_stories`, `archive_days`.
+  `lookback_hours` (also per feed), `top_stories`, `archive_days` (one entry per day, default 15 days).
 
 ## AI briefing (optional)
 

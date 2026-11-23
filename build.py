@@ -12,7 +12,7 @@ import sys
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
@@ -585,7 +585,7 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
         "dateline": f"{now_local.strftime('%A, %B')} {now_local.day}",
         "updated_time": clock(now_local),
         "edition": edition,
-        "edition_id": f"{now_local:%Y-%m-%d}-{edition.lower()}",
+        "date_id": f"{now_local:%Y-%m-%d}",
         "built": int(now.timestamp()),
         "total_new": total_new,
         "show_first": int(cfg.get("show_first", 5)),
@@ -594,11 +594,16 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
 
 
 def save_archive(ctx: dict, cfg: dict, now: datetime) -> list[dict]:
-    """Store this edition and return all kept editions, newest first."""
+    """Store this edition as its day's entry and return all kept days, newest first.
+
+    One file per day: each build overwrites the day's file, so a day ends up holding its
+    last edition (Evening when that build runs). Keeps today plus archive_days - 1 days.
+    """
     ARCHIVE.mkdir(parents=True, exist_ok=True)
-    save_json(ARCHIVE / f"{ctx['edition_id']}.json", ctx, indent=None)
-    keep_days = int(cfg.get("archive_days", 30))
-    horizon = (now - timedelta(days=keep_days)).date().isoformat()
+    save_json(ARCHIVE / f"{ctx['date_id']}.json", ctx, indent=None)
+    keep_days = max(1, int(cfg.get("archive_days", 15)))
+    today = date.fromisoformat(ctx["date_id"])
+    horizon = (today - timedelta(days=keep_days - 1)).isoformat()
     editions = []
     for path in sorted(ARCHIVE.glob("*.json"), reverse=True):
         if path.stem[:10] < horizon:

@@ -154,7 +154,7 @@ chatbot, generative, Llama, Mistral.
 | **1. MVP** ✅ | Everything above: config, build, page, PWA, workflow, deploy |
 | **2. Polish** ✅ | Per-category "show more" via `<details>`, headline skip lists, more Science sources, IDF-weighted story matching, Top Stories, feed-health issues, "new since last visit". Ongoing: tune feeds/keywords with use |
 | **3. Optional AI** ✅ (built, off until a key is added) | A short briefing per category, written by Claude during the build. Runs only when the `ANTHROPIC_API_KEY` repo secret exists |
-| **4. Extras** ✅ | YouTube/Substack feeds (Reddit blocks bots), followed-topic highlighting, 30-day archive of past editions |
+| **4. Extras** ✅ | YouTube/Substack feeds (Reddit blocks bots), followed-topic highlighting, 15-day archive (one entry per day, its last edition) |
 
 ## Open decisions
 

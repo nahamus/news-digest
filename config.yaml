@@ -27,8 +27,8 @@ skip_titles: [quiz, crossword, podcast, horoscope, promo code, coupon, coupons,
               best deals, deals on, Black Friday deal, Black Friday deals,
               Cyber Monday deal, Cyber Monday deals]
 
-# Past editions kept in the archive.
-archive_days: 30
+# Days kept in the archive (one entry per day: that day's last edition).
+archive_days: 15
 
 # Open a GitHub issue when a feed fails this many builds in a row (closed when it recovers).
 alert_after_failures: 3

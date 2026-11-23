@@ -277,6 +277,32 @@ class Following(unittest.TestCase):
         self.assertEqual(build.following([a, b, c], {}), [])
 
 
+class Archive(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        p = mock.patch.object(build, "ARCHIVE", self.tmp)
+        p.start()
+        self.addCleanup(p.stop)
+
+    def save(self, day: str, edition: str, keep: int = 15) -> list[str]:
+        ctx = {"date_id": day, "edition": edition}
+        return [e["id"] for e in build.save_archive(ctx, {"archive_days": keep}, NOW)]
+
+    def test_one_entry_per_day_holding_the_last_edition(self):
+        self.save("2026-11-20", "Morning")
+        self.save("2026-11-20", "Midday")
+        ids = self.save("2026-11-20", "Evening")
+        self.assertEqual(ids, ["2026-11-20"])
+        self.assertEqual(json.loads((self.tmp / "2026-11-20.json").read_text())["edition"], "Evening")
+
+    def test_keeps_exactly_archive_days_days(self):
+        for d in range(1, 21):
+            ids = self.save(f"2026-11-{d:02d}", "Evening")
+        self.assertEqual(len(ids), 15)
+        self.assertEqual(ids[0], "2026-11-20")
+        self.assertEqual(ids[-1], "2026-11-06")
+
+
 class StateFiles(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
@@ -355,7 +381,7 @@ class Render(unittest.TestCase):
             build.render(c, ctx, editions)
             page = (tmp / "site" / "index.html").read_text(encoding="utf-8")
             archive = (tmp / "site" / "archive" / "index.html").read_text(encoding="utf-8")
-            self.assertTrue((tmp / "site" / "archive" / f"{ctx['edition_id']}.html").exists())
+            self.assertTrue((tmp / "site" / "archive" / f"{ctx['date_id']}.html").exists())
             self.assertTrue((tmp / "site" / "sw.js").exists())
 
         ids = re.findall(r'\bid="([^"]+)"', page)
