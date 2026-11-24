@@ -33,7 +33,7 @@ archive_days: 15
 # Open a GitHub issue when a feed fails this many builds in a row (closed when it recovers).
 alert_after_failures: 3
 
-# AI briefing: a 2-3 sentence summary at the top of each category, written by Claude.
+# AI briefing at the top of each edition, written by Claude: a short overview, then one line per section.
 # Access is keyless (Workload Identity Federation, set up in digest.yml); without it, skipped.
 briefing:
   enabled: true

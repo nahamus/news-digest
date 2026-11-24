@@ -31,13 +31,26 @@
 {% endfor %}
 </div></nav>
 <main class="wrap">
+{% if briefing %}
+<section id="briefing" class="briefing ktop" aria-labelledby="briefing-title">
+  <h2 id="briefing-title">{{ edition }} briefing</h2>
+  <p class="overview">{{ briefing.overview | hl }}</p>
+  {% if briefing.sections %}
+  <ul>
+  {% for s in briefing.sections %}
+    <li class="k{{ s.color }}"><a href="#{{ s.slug }}">{{ s.name }}</a>{{ s.text | hl }}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+  <p class="note">Written by AI from this edition's headlines.</p>
+</section>
+{% endif %}
 {% for b in blocks %}
 <section id="{{ b.slug }}" class="k{{ b.color }}">
   <div class="sec-head">
     <h2>{{ b.name }}</h2>
     <small>{{ b.stories | length }} {{ "story" if b.stories | length == 1 else "stories" }}<span data-count="{{ b.slug }}"{% if not b.new %} hidden{% endif %}> · <b>{{ b.new }} new</b></span></small>
   </div>
-  {% if b.briefing %}<p class="brief"><b>Briefing · AI summary</b>{{ b.briefing }}</p>{% endif %}
   {% if b.stories %}
   {% set limit = show_first if b.kind == "category" else 99 %}
   <ol>

@@ -92,15 +92,28 @@ section { padding-top: 30px; }
 h2 { margin: 0; font: 700 22px/1.2 var(--serif); }
 .sec-head small { color: var(--muted); font-size: 13px; }
 .sec-head small b { color: var(--c); }
-.brief {
-  margin: 12px 0 2px; padding: 12px 14px; border-radius: 12px;
-  background: color-mix(in srgb, var(--c) 9%, transparent);
-  font-size: 15px; line-height: 1.5;
+
+/* edition briefing: the first thing on the page */
+.briefing {
+  margin-top: 22px; padding: 16px 18px 12px; border-radius: 16px;
+  background: color-mix(in srgb, var(--c) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
 }
-.brief b {
-  display: block; margin-bottom: 2px; font-size: 11px; letter-spacing: .08em;
+.briefing h2 {
+  font: 700 12px/1.2 var(--sans); letter-spacing: .09em;
   text-transform: uppercase; color: var(--c);
 }
+.briefing .overview { margin: 8px 0 4px; font: 400 18px/1.5 var(--serif); }
+.briefing ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.briefing li {
+  padding: 9px 0; border-top: 1px solid color-mix(in srgb, var(--c) 18%, transparent);
+  font-size: 15px; line-height: 1.45;
+}
+.briefing li a {
+  display: block; margin-bottom: 1px; color: var(--c);
+  font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.briefing .note { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
 ol { list-style: none; margin: 0; padding: 0; }
 
 /* stories */

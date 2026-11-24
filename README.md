@@ -6,10 +6,11 @@ https://nahamus.github.io/news-digest/
 
 ## What's on the page
 
+- **Briefing** (first on the page): an AI-written overview of the edition, 3–4
+  sentences on what matters most, then one line per section linking to it (see below).
 - **Top Stories**: stories that 3+ outlets are covering, pulled out of their categories.
 - **Following**: stories mentioning your `follow` topics, highlighted wherever they appear.
-- **Categories**: the first 5 stories, with the rest behind "Show more". Each category
-  can open with a 2–3 sentence AI briefing (see below).
+- **Categories**: the first 5 stories, with the rest behind "Show more".
 - **New** markers show what's new since your last visit on that device (or since the
   last build, on a first visit).
 - **Archive**: past editions from the last 30 days, linked in the footer.

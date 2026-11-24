@@ -377,6 +377,9 @@ class Render(unittest.TestCase):
                 mock.patch.object(build, "ARCHIVE", tmp / "archive"), \
                 mock.patch.dict(os.environ, NO_CLAUDE):
             ctx = build.build_context(c, [top], [top], [stories, [], []], NOW)
+            self.assertIsNone(ctx["briefing"])  # no Claude access in tests
+            ctx["briefing"] = {"overview": "A Riemann day.", "sections": [
+                {"name": "Science", "slug": "science", "color": "0", "text": "Primes again."}]}
             editions = build.save_archive(ctx, c, NOW)
             build.render(c, ctx, editions)
             page = (tmp / "site" / "index.html").read_text(encoding="utf-8")
@@ -393,17 +396,47 @@ class Render(unittest.TestCase):
         self.assertIn("<mark>Riemann</mark>", page)
         self.assertIn("Also covered by <b>B</b>", page)
         self.assertEqual(ctx["total_new"], 1)
+        self.assertLess(page.index('id="briefing"'), page.index('id="top-stories"'))  # first thing
+        self.assertIn("A <mark>Riemann</mark> day.", page)
+        self.assertIn('<a href="#science">Science</a>Primes again.', page)
         self.assertIn(f"{ctx['edition']} · ", archive)  # NOW is 11 AM Eastern: Midday
 
 
 NO_CLAUDE = {"ANTHROPIC_API_KEY": "", "ANTHROPIC_FEDERATION_RULE_ID": "", "ANTHROPIC_ORGANIZATION_ID": ""}
 
 
+def block(kind: str, name: str, stories: int = 1, color: str = "0") -> dict:
+    st = {"title": f"{name} headline", "summary": "blurb", "also": []}
+    return {"kind": kind, "name": name, "slug": build.slugify(name), "color": color,
+            "stories": [st] * stories}
+
+
 class Briefing(unittest.TestCase):
     def test_skipped_without_claude_access(self):
         with mock.patch.dict(os.environ, NO_CLAUDE):
             self.assertFalse(build.has_claude_access())
-            self.assertEqual(build.briefings({"briefing": {"enabled": True}}, []), {})
+            self.assertIsNone(build.edition_briefing({"briefing": {"enabled": True}}, []))
+
+    def test_input_has_top_stories_and_categories_but_not_following(self):
+        text = build.briefing_input([block("top", "Top Stories"), block("follow", "Following"),
+                                     block("category", "Science"), block("category", "Tech", 0)])
+        self.assertIn("## Top Stories", text)
+        self.assertIn("## Science", text)
+        self.assertNotIn("Following", text)
+        self.assertNotIn("## Tech", text)  # empty sections are left out
+
+    def test_shape_keeps_page_order_and_drops_unknown_sections(self):
+        blocks = [block("top", "Top Stories"), block("category", "Science", color="0"),
+                  block("category", "Tech", color="1"), block("category", "AI", 0, color="2")]
+        data = {"overview": " Big day. ", "sections": [
+            {"category": "tech", "text": "Chips."}, {"category": "Science", "text": "Primes."},
+            {"category": "AI", "text": "No stories, so dropped."},
+            {"category": "Sports", "text": "Not a section."}]}
+        out = build.shape_briefing(data, blocks)
+        self.assertEqual(out["overview"], "Big day.")
+        self.assertEqual([(s["name"], s["slug"], s["color"]) for s in out["sections"]],
+                         [("Science", "science", "0"), ("Tech", "tech", "1")])
+        self.assertIsNone(build.shape_briefing({"overview": " ", "sections": []}, blocks))
 
     def test_keyless_federation_counts_as_access(self):
         env = dict(NO_CLAUDE, ANTHROPIC_FEDERATION_RULE_ID="fdrl_x", ANTHROPIC_ORGANIZATION_ID="org")
@@ -414,7 +447,7 @@ class Briefing(unittest.TestCase):
 
     def test_skipped_when_disabled(self):
         with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "k"}):
-            self.assertEqual(build.briefings({"briefing": {"enabled": False}}, []), {})
+            self.assertIsNone(build.edition_briefing({"briefing": {"enabled": False}}, []))
 
 
 class ConfigFile(unittest.TestCase):

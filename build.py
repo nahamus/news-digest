@@ -412,12 +412,37 @@ def mark_new(stories: list[Story], now: datetime) -> None:
 
 # ---------------------------------------------------------------- AI briefing (optional)
 
-BRIEFING_SYSTEM = """You write the short briefing that opens each section of a personal news digest.
-For each category you get the headlines (with blurbs and how many outlets covered each story).
-Write 2-3 plain sentences per category saying what matters today: name the most important
-developments and connect related stories. Neutral, factual tone. Use only the information
-given - do not add facts, numbers or context that are not in the headlines and blurbs.
-No markdown, no bullet points, no preamble."""
+BRIEFING_SYSTEM = """You write the briefing at the top of one edition of a personal news digest:
+the first thing the reader sees, so they know what matters before scrolling.
+You get the edition's headlines with blurbs, grouped by section. "Top Stories" are the ones
+the most outlets are covering; [N outlets] marks wide coverage.
+
+Write:
+- overview: 3-4 sentences on the most important developments in this edition as a whole,
+  leading with the biggest story. Connect related stories across sections.
+- sections: for each section listed, one sentence (under 30 words) on what matters most
+  there. Don't repeat what the overview already said; pick the next most useful thing.
+
+Neutral, factual tone. Use only the information given - do not add facts, numbers or
+context that are not in the headlines and blurbs. Plain text: no markdown, no preamble."""
+
+BRIEFING_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "overview": {"type": "string"},
+        "sections": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"category": {"type": "string"}, "text": {"type": "string"}},
+                "required": ["category", "text"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["overview", "sections"],
+    "additionalProperties": False,
+}
 
 
 def has_claude_access() -> bool:
@@ -427,45 +452,51 @@ def has_claude_access() -> bool:
         env.get("ANTHROPIC_FEDERATION_RULE_ID") and env.get("ANTHROPIC_ORGANIZATION_ID"))
 
 
-def briefings(cfg: dict, blocks: list[dict]) -> dict[str, str]:
-    """One Claude call for all categories. Skipped unless enabled and Claude access is set up."""
-    bcfg = cfg.get("briefing") or {}
-    if not bcfg.get("enabled") or not has_claude_access():
-        return {}
-    try:
-        import anthropic
-    except ImportError:
-        log("Briefing skipped: anthropic package not installed")
-        return {}
-
+def briefing_input(blocks: list[dict]) -> str:
+    """The edition's headlines for Claude: Top Stories first, then each non-empty category."""
     parts = []
     for b in blocks:
-        if b["kind"] != "category" or not b["stories"]:
+        if b["kind"] == "follow" or not b["stories"]:
             continue
         lines = [f"## {b['name']}"]
         for st in b["stories"]:
             covered = f" [{1 + len(st['also'])} outlets]" if st["also"] else ""
             lines.append(f"- {st['title']}{covered}: {st['summary']}")
         parts.append("\n".join(lines))
-    if not parts:
-        return {}
+    return "\n\n".join(parts)
 
-    schema = {
-        "type": "object",
-        "properties": {
-            "briefings": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {"category": {"type": "string"}, "text": {"type": "string"}},
-                    "required": ["category", "text"],
-                    "additionalProperties": False,
-                },
-            }
-        },
-        "required": ["briefings"],
-        "additionalProperties": False,
-    }
+
+def shape_briefing(data: dict, blocks: list[dict]) -> dict | None:
+    """Claude's JSON -> {overview, sections}, sections in page order with their anchors.
+
+    Section lines for unknown or empty categories are dropped.
+    """
+    overview = (data.get("overview") or "").strip()
+    if not overview:
+        return None
+    texts = {s["category"].strip().lower(): s["text"].strip() for s in data.get("sections", [])}
+    sections = []
+    for b in blocks:
+        text = texts.get(b["name"].lower())
+        if b["kind"] == "category" and b["stories"] and text:
+            sections.append({"name": b["name"], "slug": b["slug"], "color": b["color"], "text": text})
+    return {"overview": overview, "sections": sections}
+
+
+def edition_briefing(cfg: dict, blocks: list[dict]) -> dict | None:
+    """One Claude call per build. None unless enabled and Claude access is set up."""
+    bcfg = cfg.get("briefing") or {}
+    if not bcfg.get("enabled") or not has_claude_access():
+        return None
+    try:
+        import anthropic
+    except ImportError:
+        log("Briefing skipped: anthropic package not installed")
+        return None
+
+    content = briefing_input(blocks)
+    if not content:
+        return None
     try:
         client = anthropic.Anthropic()
         response = client.beta.messages.create(
@@ -476,18 +507,18 @@ def briefings(cfg: dict, blocks: list[dict]) -> dict[str, str]:
             system=BRIEFING_SYSTEM,
             output_config={
                 "effort": bcfg.get("effort", "low"),
-                "format": {"type": "json_schema", "schema": schema},
+                "format": {"type": "json_schema", "schema": BRIEFING_SCHEMA},
             },
-            messages=[{"role": "user", "content": "\n\n".join(parts)}],
+            messages=[{"role": "user", "content": content}],
         )
         if response.stop_reason != "end_turn":
             log(f"Briefing skipped: stop_reason={response.stop_reason}")
-            return {}
+            return None
         text = next(b.text for b in response.content if b.type == "text")
-        data = json.loads(text)
-        out = {item["category"].strip(): item["text"].strip() for item in data["briefings"]}
-        log(f"Briefing: {len(out)} categories ({response.usage.input_tokens} in / "
-            f"{response.usage.output_tokens} out tokens)")
+        out = shape_briefing(json.loads(text), blocks)
+        if out:
+            log(f"Briefing: overview + {len(out['sections'])} sections "
+                f"({response.usage.input_tokens} in / {response.usage.output_tokens} out tokens)")
         return out
     except anthropic.APIStatusError as exc:
         log(f"Briefing skipped: API error {exc.status_code}: {exc.message}")
@@ -497,7 +528,7 @@ def briefings(cfg: dict, blocks: list[dict]) -> dict[str, str]:
         log(f"Briefing skipped: unexpected response: {exc}")
     except anthropic.AnthropicError as exc:  # e.g. sign-in (credentials) failures
         log(f"Briefing skipped: {type(exc).__name__}: {exc}")
-    return {}
+    return None
 
 
 # ---------------------------------------------------------------- render
@@ -582,10 +613,6 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
     for b in blocks:
         b["new"] = sum(c["new"] for c in b["stories"])
 
-    brief = briefings(cfg, blocks)
-    for b in blocks:
-        b["briefing"] = brief.get(b["name"], "")
-
     total_new = len({c["key"] for b in blocks for c in b["stories"] if c["new"]})
     edition = edition_name(now_local.hour)
     return {
@@ -599,6 +626,7 @@ def build_context(cfg, top, follows, per_cat, now) -> dict:
         "total_new": total_new,
         "show_first": int(cfg.get("show_first", 5)),
         "blocks": blocks,
+        "briefing": edition_briefing(cfg, blocks),
     }
 
 
