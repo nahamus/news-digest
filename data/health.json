@@ -5,224 +5,224 @@
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.nature.com/nature.rss": {
    "name": "Nature",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://phys.org/rss-feed/": {
    "name": "Phys.org",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.quantamagazine.org/feed/": {
    "name": "Quanta",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.nasa.gov/news-release/feed/": {
    "name": "NASA",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.newscientist.com/feed/home/": {
    "name": "New Scientist",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.sciencenews.org/feed": {
    "name": "Science News",
    "category": "Science",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.arstechnica.com/arstechnica/index": {
    "name": "Ars Technica",
    "category": "Tech",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.theverge.com/rss/index.xml": {
    "name": "The Verge",
    "category": "Tech",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://techcrunch.com/feed/": {
    "name": "TechCrunch",
    "category": "Tech",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.wired.com/feed/rss": {
    "name": "Wired",
    "category": "Tech",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://hnrss.org/frontpage?points=150": {
    "name": "Hacker News",
    "category": "Tech",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.technologyreview.com/topic/artificial-intelligence/feed": {
    "name": "MIT Tech Review",
    "category": "AI",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml": {
    "name": "The Verge",
    "category": "AI",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://techcrunch.com/category/artificial-intelligence/feed/": {
    "name": "TechCrunch",
    "category": "AI",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://hnrss.org/frontpage?points=100": {
    "name": "Hacker News",
    "category": "AI",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114": {
    "name": "CNBC",
    "category": "Finance",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.content.dowjones.io/public/rss/mw_topstories": {
    "name": "MarketWatch",
    "category": "Finance",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.bloomberg.com/markets/news.rss": {
    "name": "Bloomberg",
    "category": "Finance",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC&region=US&lang=en-US": {
    "name": "Yahoo Finance",
    "category": "Finance",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.npr.org/1014/rss.xml": {
    "name": "NPR",
    "category": "Politics",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://rss.politico.com/politics-news.xml": {
    "name": "Politico",
    "category": "Politics",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://thehill.com/news/feed/": {
    "name": "The Hill",
    "category": "Politics",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.theguardian.com/us-news/us-politics/rss": {
    "name": "The Guardian",
    "category": "Politics",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.bbci.co.uk/news/world/rss.xml": {
    "name": "BBC World",
    "category": "Politics",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://allafrica.com/tools/headlines/rdf/ethiopia/headlines.rdf": {
    "name": "AllAfrica",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.ethiopia-insight.com/feed/": {
    "name": "Ethiopia Insight",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://addisfortune.news/feed/": {
    "name": "Addis Fortune",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.theguardian.com/world/ethiopia/rss": {
    "name": "The Guardian",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://feeds.bbci.co.uk/news/world/africa/rss.xml": {
    "name": "BBC Africa",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://www.aljazeera.com/xml/rss/all.xml": {
    "name": "Al Jazeera",
    "category": "Ethiopia",
    "fails": 0,
    "error": "",
-   "last_ok": "2026-11-24T15:34:07+00:00"
+   "last_ok": "2026-11-24T15:51:47+00:00"
   },
   "https://news.google.com/rss/search?q=Ethiopia+when:3d&hl=en-US&gl=US&ceid=US:en": {
    "name": "Google News",
    "category": "Ethiopia",
-   "fails": 1,
-   "error": "HTTPError: HTTP Error 503: Service Unavailable",
-   "last_ok": "2026-11-24T12:17:30+00:00"
+   "fails": 0,
+   "error": "",
+   "last_ok": "2026-11-24T15:51:47+00:00"
   }
  }
 }
