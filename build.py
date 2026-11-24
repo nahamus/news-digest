@@ -420,10 +420,17 @@ given - do not add facts, numbers or context that are not in the headlines and b
 No markdown, no bullet points, no preamble."""
 
 
+def has_claude_access() -> bool:
+    """An API key, or keyless Workload Identity Federation (set up by the workflow)."""
+    env = os.environ
+    return bool(env.get("ANTHROPIC_API_KEY")) or bool(
+        env.get("ANTHROPIC_FEDERATION_RULE_ID") and env.get("ANTHROPIC_ORGANIZATION_ID"))
+
+
 def briefings(cfg: dict, blocks: list[dict]) -> dict[str, str]:
-    """One Claude call for all categories. Skipped unless enabled and ANTHROPIC_API_KEY is set."""
+    """One Claude call for all categories. Skipped unless enabled and Claude access is set up."""
     bcfg = cfg.get("briefing") or {}
-    if not bcfg.get("enabled") or not os.environ.get("ANTHROPIC_API_KEY"):
+    if not bcfg.get("enabled") or not has_claude_access():
         return {}
     try:
         import anthropic
@@ -488,6 +495,8 @@ def briefings(cfg: dict, blocks: list[dict]) -> dict[str, str]:
         log(f"Briefing skipped: connection error: {exc}")
     except (ValueError, KeyError, StopIteration) as exc:
         log(f"Briefing skipped: unexpected response: {exc}")
+    except anthropic.AnthropicError as exc:  # e.g. sign-in (credentials) failures
+        log(f"Briefing skipped: {type(exc).__name__}: {exc}")
     return {}
 
 

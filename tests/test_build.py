@@ -375,7 +375,7 @@ class Render(unittest.TestCase):
         top.url_keys, top.category, top.first_seen = ["t.com/r"], 2, NOW
         with mock.patch.object(build, "SITE", tmp / "site"), \
                 mock.patch.object(build, "ARCHIVE", tmp / "archive"), \
-                mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": ""}):
+                mock.patch.dict(os.environ, NO_CLAUDE):
             ctx = build.build_context(c, [top], [top], [stories, [], []], NOW)
             editions = build.save_archive(ctx, c, NOW)
             build.render(c, ctx, editions)
@@ -396,10 +396,21 @@ class Render(unittest.TestCase):
         self.assertIn(f"{ctx['edition']} · ", archive)  # NOW is 11 AM Eastern: Midday
 
 
+NO_CLAUDE = {"ANTHROPIC_API_KEY": "", "ANTHROPIC_FEDERATION_RULE_ID": "", "ANTHROPIC_ORGANIZATION_ID": ""}
+
+
 class Briefing(unittest.TestCase):
-    def test_skipped_without_api_key(self):
-        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": ""}):
+    def test_skipped_without_claude_access(self):
+        with mock.patch.dict(os.environ, NO_CLAUDE):
+            self.assertFalse(build.has_claude_access())
             self.assertEqual(build.briefings({"briefing": {"enabled": True}}, []), {})
+
+    def test_keyless_federation_counts_as_access(self):
+        env = dict(NO_CLAUDE, ANTHROPIC_FEDERATION_RULE_ID="fdrl_x", ANTHROPIC_ORGANIZATION_ID="org")
+        with mock.patch.dict(os.environ, env):
+            self.assertTrue(build.has_claude_access())
+        with mock.patch.dict(os.environ, dict(NO_CLAUDE, ANTHROPIC_FEDERATION_RULE_ID="fdrl_x")):
+            self.assertFalse(build.has_claude_access())  # needs the org ID too
 
     def test_skipped_when_disabled(self):
         with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "k"}):

@@ -34,7 +34,7 @@ archive_days: 15
 alert_after_failures: 3
 
 # AI briefing: a 2-3 sentence summary at the top of each category, written by Claude.
-# Only runs when the repo has an ANTHROPIC_API_KEY secret; otherwise it is skipped.
+# Access is keyless (Workload Identity Federation, set up in digest.yml); without it, skipped.
 briefing:
   enabled: true
   model: claude-opus-5-5

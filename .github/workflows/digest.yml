@@ -45,10 +45,25 @@ jobs:
       - name: Test
         run: python -m unittest discover tests
 
+      # AI briefing access is keyless (Workload Identity Federation): GitHub issues this
+      # run a short-lived token, and the anthropic SDK exchanges it for API access via
+      # the federation rule below. The rule only accepts nahamus/news-digest on main.
+      # These IDs are identifiers, not secrets. If this step fails, the build still
+      # runs and simply skips the briefing.
+      - name: Get Anthropic sign-in token
+        continue-on-error: true
+        run: |
+          curl -sSf -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://api.anthropic.com" \
+            | jq -r .value > "$RUNNER_TEMP/anthropic-jwt"
+
       - name: Build
         env:
-          # Optional: the AI briefing runs only when this secret exists.
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_FEDERATION_RULE_ID: fdrl_01XyXWsxq5ymZHqAnooouXWU
+          ANTHROPIC_ORGANIZATION_ID: 180df7ed-30ec-46b3-a180-6ae5353d15fd
+          ANTHROPIC_SERVICE_ACCOUNT_ID: svac_01QYSEPwNVi4NKDPZ4TdoPv1
+          ANTHROPIC_WORKSPACE_ID: wrkspc_01XaAS9vH3maJ4g7MwXQhp4a
+          ANTHROPIC_IDENTITY_TOKEN_FILE: ${{ runner.temp }}/anthropic-jwt
         run: python build.py
 
       - name: Commit data (seen, health, archive)

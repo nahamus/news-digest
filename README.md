@@ -26,14 +26,18 @@ Edit `config.yaml`. Pushing a change to `main` rebuilds the site automatically.
 - `max_per_category`, `max_per_source` (also per category), `show_first`,
   `lookback_hours` (also per feed), `top_stories`, `archive_days` (one entry per day, default 15 days).
 
-## AI briefing (optional)
+## AI briefing
 
-Off until you add an Anthropic API key to the repo; costs roughly a few cents per build.
+Claude writes the briefing during each build. Access is keyless (Workload Identity
+Federation): there is no API key to store or renew. Each run gets a short-lived GitHub
+token, and the Anthropic SDK exchanges it for API access through a federation rule set up
+in the Claude Console (Settings → Workload identity federation). The rule accepts only
+`nahamus/news-digest` on `main`. The rule, organization, service account and workspace
+IDs are in [digest.yml](.github/workflows/digest.yml). They are identifiers, not secrets.
 
-1. Create a key at https://console.anthropic.com
-2. `gh secret set ANTHROPIC_API_KEY -R nahamus/news-digest` and paste the key.
-
-To turn it off again, delete the secret or set `briefing: enabled: false`.
+To turn it off, set `briefing: enabled: false` in `config.yaml`, or archive the rule in
+the Console. If sign-in fails, the build still publishes, just without the briefing (the
+run log says why).
 
 ## Feed health
 
