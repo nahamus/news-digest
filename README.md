@@ -6,14 +6,14 @@ https://nahamus.github.io/news-digest/
 
 ## What's on the page
 
-- **Briefing** (first on the page): an AI-written overview of the edition, 3–4
-  sentences on what matters most, then one line per section linking to it (see below).
+- **Briefing** (optional, off by default): an AI-written overview at the top of the
+  edition, 3–4 sentences on what matters most, then one line per section (see below).
 - **Top Stories**: stories that 3+ outlets are covering, pulled out of their categories.
 - **Following**: stories mentioning your `follow` topics, highlighted wherever they appear.
 - **Categories**: the first 5 stories, with the rest behind "Show more".
 - **New** markers show what's new since your last visit on that device (or since the
   last build, on a first visit).
-- **Archive**: past editions from the last 30 days, linked in the footer.
+- **Archive**: one edition per day (that day's last) for the last 15 days, linked in the footer.
 
 ## Change what you see
 
@@ -27,17 +27,18 @@ Edit `config.yaml`. Pushing a change to `main` rebuilds the site automatically.
 - `max_per_category`, `max_per_source` (also per category), `show_first`,
   `lookback_hours` (also per feed), `top_stories`, `archive_days` (one entry per day, default 15 days).
 
-## AI briefing
+## AI briefing (off by default)
 
-Claude writes the briefing during each build. Access is keyless (Workload Identity
+Turn it on with `briefing: enabled: true` in `config.yaml`; everything else is already
+set up. When on, Claude writes the briefing during each build (about $0.04 per build). Access is keyless (Workload Identity
 Federation): there is no API key to store or renew. Each run gets a short-lived GitHub
 token, and the Anthropic SDK exchanges it for API access through a federation rule set up
 in the Claude Console (Settings → Workload identity federation). The rule accepts only
 `nahamus/news-digest` on `main`. The rule, organization, service account and workspace
 IDs are in [digest.yml](.github/workflows/digest.yml). They are identifiers, not secrets.
 
-To turn it off, set `briefing: enabled: false` in `config.yaml`, or archive the rule in
-the Console. If sign-in fails, the build still publishes, just without the briefing (the
+To turn it off, set `briefing: enabled: false` in `config.yaml` (the default), or
+archive the rule in the Console. If sign-in fails, the build still publishes, just without the briefing (the
 run log says why).
 
 ## Feed health
