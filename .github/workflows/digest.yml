@@ -1,7 +1,7 @@
 name: Build digest
 
 # Timed builds come from cron-job.org, which calls the workflow_dispatch API at
-# 7:17, 12:17 and 17:17 America/New_York. GitHub's own `schedule` trigger never
+# 7:17, 10:17, 13:17 and 17:17 America/New_York. GitHub's own `schedule` trigger never
 # fired for this repo (or fresh test repos on this account), so it was removed.
 on:
   workflow_dispatch:

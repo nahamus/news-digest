@@ -1,7 +1,7 @@
 # News Digest
 
-A personal news digest built from public RSS feeds by GitHub Actions three times a day
-(7:17 AM, 12:17 PM and 5:17 PM Eastern) and published to GitHub Pages:
+A personal news digest built from public RSS feeds by GitHub Actions four times a day
+(7:17 AM, 10:17 AM, 1:17 PM and 5:17 PM Eastern) and published to GitHub Pages:
 https://nahamus.github.io/news-digest/
 
 ## What's on the page
@@ -50,7 +50,7 @@ feed recovers.
 ## Schedule
 
 GitHub's built-in `schedule` trigger never fired for this account, so a free
-[cron-job.org](https://cron-job.org) job starts the builds instead. At 7:17, 12:17 and
+[cron-job.org](https://cron-job.org) job starts the builds instead. At 7:17, 10:17, 13:17 and
 17:17 (America/New_York, so daylight saving is handled) it sends:
 
 ```

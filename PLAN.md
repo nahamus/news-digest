@@ -2,7 +2,7 @@
 
 A personal news digest. You choose categories (Science, Tech, AI, Finance, Politics…) and
 the app collects stories from public RSS feeds, sorts and dedupes them, and publishes a
-lightweight static page 2x a day. The page is installable on a phone as a home-screen app.
+lightweight static page 4x a day. The page is installable on a phone as a home-screen app.
 
 ## Requirements (agreed)
 
@@ -18,7 +18,7 @@ lightweight static page 2x a day. The page is installable on a phone as a home-s
 ## Architecture
 
 ```
-cron-job.org (7:17 AM, 12:17 PM & 5:17 PM Eastern) → workflow_dispatch API
+cron-job.org (7:17 AM, 10:17 AM, 1:17 PM & 5:17 PM Eastern) → workflow_dispatch API
   └─ GitHub Actions
   └─ build.py: fetch RSS → filter → categorize → dedupe → rank → render
        ├─ commits data/seen.json   (story history, keeps the repo "active")
@@ -114,7 +114,7 @@ chatbot, generative, Llama, Mistral.
 
 - Triggers:
   - `workflow_dispatch`: manual "build now", and the timed builds. A cron-job.org job
-    POSTs to the dispatch API at 7:17 / 12:17 / 17:17 America/New_York, using a
+    POSTs to the dispatch API at 7:17 / 10:17 / 13:17 / 17:17 America/New_York, using a
     fine-grained token (this repo, Actions read/write only). Editions are named
     Morning / Midday / Evening by local hour.
   - No `schedule` trigger: GitHub's never fired for this repo or for fresh test repos on
@@ -159,4 +159,4 @@ chatbot, generative, Llama, Mistral.
 ## Open decisions
 
 - Final category list and any region focus (currently US + world politics, US markets).
-- Digest times (currently 7:17 AM, 12:17 PM and 5:17 PM Eastern, set in cron-job.org).
+- Digest times (currently 7:17 AM, 10:17 AM, 1:17 PM and 5:17 PM Eastern, set in cron-job.org).
