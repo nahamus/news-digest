@@ -59,7 +59,7 @@ jobs:
 
       - name: Build
         env:
-          ANTHROPIC_FEDERATION_RULE_ID: fdrl_01XyXWsxq5ymZHqAnooouXWU
+          ANTHROPIC_FEDERATION_RULE_ID: fdrl_01KGKZmttvHLNks5hrtrDJTz
           ANTHROPIC_ORGANIZATION_ID: 180df7ed-30ec-46b3-a180-6ae5353d15fd
           ANTHROPIC_SERVICE_ACCOUNT_ID: svac_01QYSEPwNVi4NKDPZ4TdoPv1
           ANTHROPIC_WORKSPACE_ID: wrkspc_01XaAS9vH3maJ4g7MwXQhp4a
