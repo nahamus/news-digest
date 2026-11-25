@@ -4,7 +4,7 @@
 {% block body %}
 {% macro story(st, b, lead) %}
     <li class="story{% if lead %} lead{% endif %}{% if st.new %} is-new{% endif %}" data-seen="{{ st.seen }}" data-key="{{ st.key }}">
-      <a href="{{ st.url }}" rel="noopener">
+      <a href="{{ st.url }}" target="_blank" rel="noopener">
         <div class="kicker">
           <span class="new">New</span>
           {% if b.kind != "category" %}<span class="cat cc{{ st.cat_idx }}">{{ st.category }}</span><span>·</span>{% endif %}
