@@ -386,6 +386,9 @@ class Render(unittest.TestCase):
             archive = (tmp / "site" / "archive" / "index.html").read_text(encoding="utf-8")
             self.assertTrue((tmp / "site" / "archive" / f"{ctx['date_id']}.html").exists())
             self.assertTrue((tmp / "site" / "sw.js").exists())
+            latest = json.loads((tmp / "site" / "latest.json").read_text(encoding="utf-8"))
+            self.assertEqual(latest["date_id"], ctx["date_id"])
+            self.assertEqual([b["kind"] for b in latest["blocks"]][:2], ["top", "follow"])
 
         ids = re.findall(r'\bid="([^"]+)"', page)
         self.assertEqual(len(ids), len(set(ids)), "duplicate HTML ids")

@@ -659,6 +659,8 @@ def render(cfg: dict, ctx: dict, editions: list[dict]) -> None:
     page = env.get_template("digest.html").render(**ctx, base="", is_archive=False)
     (SITE / "index.html").write_text(page, encoding="utf-8")
     log(f"Wrote site/index.html ({len(page.encode()) / 1024:.1f} KB)")
+    # Machine-readable copy of this edition at a stable URL (read by roku-home-board).
+    save_json(SITE / "latest.json", ctx, indent=None)
 
     out = SITE / "archive"
     out.mkdir()

@@ -14,6 +14,9 @@ https://nahamus.github.io/news-digest/
 - **New** markers show what's new since your last visit on that device (or since the
   last build, on a first visit).
 - **Archive**: one edition per day (that day's last) for the last 15 days, linked in the footer.
+- **latest.json**: the current edition as JSON at
+  https://nahamus.github.io/news-digest/latest.json (same shape as `data/archive/*.json`).
+  The roku-home-board TV screensaver reads Top Stories and Following from it.
 
 ## Change what you see
 
