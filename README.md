@@ -2,7 +2,7 @@
 
 A personal news digest built from public RSS feeds by GitHub Actions four times a day
 (7:17 AM, 10:17 AM, 1:17 PM and 5:17 PM Eastern) and published to GitHub Pages:
-https://nahamus.github.io/news-digest/
+https://news.nahamus.com/
 
 ## What's on the page
 
@@ -15,7 +15,7 @@ https://nahamus.github.io/news-digest/
   last build, on a first visit).
 - **Archive**: one edition per day (that day's last) for the last 15 days, linked in the footer.
 - **latest.json**: the current edition as JSON at
-  https://nahamus.github.io/news-digest/latest.json (same shape as `data/archive/*.json`).
+  https://news.nahamus.com/latest.json (same shape as `data/archive/*.json`).
   The roku-home-board TV screensaver reads Top Stories and Following from it.
 
 ## Change what you see
